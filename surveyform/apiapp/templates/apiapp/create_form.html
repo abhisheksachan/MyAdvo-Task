@@ -1,0 +1,146 @@
+{% load staticfiles %}
+<!DOCTYPE html> 
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div class="main-container">
+        <center><h1>Create Form</h1></center>
+        <div class="container">
+            <form id="main-form">
+                <div class="main-form-wrapper">
+                    <div class="form-group">
+                        <label for="creating form">Form Name</label>
+                        <input type="text" name="form_name" class="form-control" id="form_name" placeholder="Enter Form name">
+                    </div>
+                    <div class="question_wrapper">
+                        <div class="row ques-list">
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    <label for="form_name">Question Text</label>
+                                    <input type="text" name="question_text" class="form-control" id="form_name" placeholder="Enter Question Text">
+                                </div>
+                                <div class="option_details">
+                                    <div class="single_option">
+                                        <label>Option</label>
+                                        <input type="text" name="option_value" class="form-control option_value" placeholder="Enter Option Value">
+                                    </div>
+                                    <br>
+                                    <button type="button" class="btn btn-primary add_option">Add option</button>
+                                    <br>
+                                </div>
+                                <br>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="que_type_wrapper">
+                                    <select class="que_type" name="question_type">
+                                        <option value="mssa" selected>Multiple Select Single Answer</option>
+                                        <option value="msma">Multiple Select Multiple Answer</option>
+                                        <option value="para">Pargraph</option>
+                                        <option value="bool">True/False</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="btn btn-primary" type="submit" id="finish_form">Finish Form</button>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary" type="button" id="add_new_que">Add new question</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var question_wrapper = $(".question_wrapper").html();
+        var single_option = $(".single_option").html();
+
+        $("#add_new_que").click(function(){
+            $(".question_wrapper").append(question_wrapper); 
+        });
+
+        $('.question_wrapper').on('change', '.que_type', function() {
+            var que_type = this.value;
+            if(que_type=="para"){
+                $(this).parent().parent().parent().find(".option_details").html("<p>Pargraph type</p>");
+            }
+            if(que_type=="bool"){
+                $(this).parent().parent().parent().find(".option_details").html("<p>Bool Type</p>");
+            }
+        });
+
+        $(".question_wrapper").on("click", ".add_option", function(){
+            $(this).parent().find(".single_option").append(single_option);
+        });
+
+        $("#main-form").submit(function(event){
+            event.preventDefault();
+
+            var form_obj = {}
+
+            var form_name = $('input[name=form_name]').val();
+            console.log("form_name", form_name);
+            var ques_list = new Array();
+            $('.question_wrapper').children('.ques-list').each(function () {
+                var ques_value = $(this).find('input[name=question_text]').val();
+                console.log("ques value", ques_value);
+
+                var option_list = new Array()
+                $(this).find('input[name=option_value]').each(function(){
+                  console.log("option value", $(this).val());
+                  option_list.push($(this).val());
+                });
+
+                var ques_obj = {};
+                ques_obj["question_text"] = ques_value;
+                ques_obj["option_list"] = option_list;
+                ques_obj["question_type"] = $(this).find('select[name=question_type]').val();
+
+                ques_list.push(ques_obj);
+
+                // console.log("option value", option_value);
+            });
+            form_obj["form_name"] = form_name;
+            form_obj["question_lists"] = ques_list;
+            // var form_data = ques_list;//new FormData();//$('#main-form')[0]);
+            console.log("form_data - - ",form_obj);
+            console.log(typeof(ques_list));
+            $.ajax({
+                url: "http://127.0.0.1:8000/form/create",
+                type: "POST",
+                data: JSON.stringify(form_obj),
+                headers: {
+                        "X-CSRFToken": "zaiG57Y47VpJkUDHdUuXKIUSe7w1pE7a",
+                            "Content-Type": "application/json"
+                        },
+                sucess: function(response) {
+                    console.log(response);
+                },  
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        })
+    });
+</script>
+
+</body>
+</html>
+
+

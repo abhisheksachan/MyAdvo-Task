@@ -1,0 +1,31 @@
+{% load staticfiles %}
+<!DOCTYPE html> 
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-treeview.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styling.css' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="//cdn.ckeditor.com/4.6.1/full/ckeditor.js"></script>
+    <script src="{% static 'js/entry.js' %}"></script>
+    <script src="{% static 'js/FileSaver.js' %}"></script>
+    <script src="{% static 'js/bootstrap-treeview.js' %}"></script>
+</head>
+
+<body>
+    <h1>Assessment Engine</h1>
+
+    <form method="post">
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+      </form>
+      <br>
+      <p><strong>-- OR --</strong></p>
+      <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
+
+</body>
+</html>

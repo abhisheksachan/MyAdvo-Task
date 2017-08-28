@@ -1,0 +1,75 @@
+{% load staticfiles %}
+<!DOCTYPE html> 
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <style type="text/css">
+        label {
+            font-weight:100;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="main-container">
+        <center><h1>{{form_name}}</h1></center>
+        <div class="container">
+         {% for question in question_list %}
+            <div>
+                <h3> {{question.question__text}}
+
+                {% if question.question__q_type__slug == "para" %}
+                    <div class="form-group">
+                      <textarea class="form-control" rows="5" id="comment"></textarea>
+                    </div>
+
+                {% elif question.question__q_type__slug == "msma" %}
+                    {% for option in question.options %}
+                        <div class="form-check">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input">
+                              {{option}}
+                            </label>
+                        </div>
+                {% endfor %}
+
+
+                {% elif question.question__q_type__slug == "mssa" %}
+                    {% for option in question.options %}
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optionsRadios{{question.question_id}}" id="optionsRadios" value={{option}} checked>
+                            {{option}}
+                          </label>
+                        </div>
+                {% endfor %}
+
+                {% elif question.question__q_type__slug == "bool" %}
+                    {% for option in question.options %}
+                        <div class="form-check">
+                          <label class="form-check-label">
+                            <input type="radio" class="form-check-input" name="optionsRadios{{question.question_id}}" id="optionsRadios" value={{option}} checked>
+                            {{option}}
+                          </label>
+                        </div>
+                {% endfor %}
+
+                {% endif %}
+            </div> 
+        {% endfor %}  
+        <button class="btn btn-primary" type="submit" id="finish_form">Submit</button>
+        </div>
+    </div>
+    
+    
+
+
+</body>
+</html>
+
+
